@@ -9,11 +9,13 @@ mongoose.connect("mongodb://localhost:27017/danish").then(() => {
   console.log("Connected to mongodb");
 });
 
+//create schema
 const schema = new mongoose.Schema({
   name: String,
   password: String,
 });
 
+//model
 const createdModel = mongoose.model("Danish-auth", schema);
 
 // const doc = new createdModel({
@@ -47,12 +49,14 @@ app.post('/login',async(req,res)=>{
     const findUser= await createdModel.findOne({name:req.body.name,password:req.body.password})
     if(findUser)
     {
-        res.send(findUser)
+        res.send(findUser.name + ' you are loginned successfully')
     }
     else{
         res.send("no user found")
     }
 })
 
-
+app.patch('/updatePassword',async(req,res)=>{
+  const updatedUser=await createdModel.findByIdAndUpdate({name:req.body.name})
+})
 app.listen(3000);
